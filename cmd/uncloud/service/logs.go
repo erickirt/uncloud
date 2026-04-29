@@ -8,6 +8,7 @@ import (
 
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/psviderski/uncloud/internal/cli"
+	"github.com/psviderski/uncloud/internal/cli/completion"
 	"github.com/psviderski/uncloud/internal/cli/logs"
 	"github.com/psviderski/uncloud/internal/cli/tui"
 	"github.com/psviderski/uncloud/pkg/api"
@@ -61,12 +62,20 @@ If no services are specified, streams logs from all services defined in the Comp
 			return runLogs(cmd.Context(), uncli, args, options)
 		},
 		GroupID: groupID,
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]cobra.Completion, cobra.ShellCompDirective) {
+			uncli := cmd.Context().Value("cli").(*cli.CLI)
+			return completion.Services(cmd.Context(), uncli, args, toComplete)
+		},
 	}
 
 	cmd.Flags().StringSliceVar(&options.Files, "file", nil,
 		"One or more Compose files to load service names from when no services are specified. (default compose.yaml)")
 
 	cmd.Flags().AddFlagSet(logs.Flags(&options))
+	completion.MachinesFlag(cmd)
+
+	completion.MachinesFlag(cmd)
+
 	return cmd
 }
 
