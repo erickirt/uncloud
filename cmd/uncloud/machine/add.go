@@ -232,8 +232,7 @@ func add(ctx context.Context, uncli *cli.CLI, remoteMachine *cli.RemoteMachine, 
 				return fmt.Errorf("confirm deployment: %w", err)
 			}
 			if !confirmed {
-				fmt.Println("Cancelled. No changes were made.")
-				return nil
+				return cli.Cancelled("Caddy deploy cancelled. The machine has been added to the cluster.")
 			}
 		}
 

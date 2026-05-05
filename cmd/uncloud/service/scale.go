@@ -155,8 +155,7 @@ func scale(ctx context.Context, uncli *cli.CLI, opts scaleOptions) error {
 			return fmt.Errorf("confirm scaling: %w", err)
 		}
 		if !confirmed {
-			fmt.Println("Cancelled. No changes were made.")
-			return nil
+			return cli.Cancelled("Scaling cancelled. No changes were made.")
 		}
 	}
 

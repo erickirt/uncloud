@@ -222,8 +222,7 @@ func runDeploy(ctx context.Context, uncli *cli.CLI, opts deployOptions) error {
 			return fmt.Errorf("confirm deployment: %w", err)
 		}
 		if !confirmed {
-			fmt.Println("Cancelled. No changes were made.")
-			return nil
+			return cli.Cancelled("Deploy cancelled. No changes were made.")
 		}
 	}
 
