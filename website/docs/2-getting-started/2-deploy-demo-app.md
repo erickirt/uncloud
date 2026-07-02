@@ -63,7 +63,6 @@ All in about a minute!
 
 ```
 $ uc machine init root@157.180.72.195
-Downloading Uncloud install script: https://raw.githubusercontent.com/psviderski/uncloud/refs/heads/main/scripts/install.sh
 ⏳ Running Uncloud install script...
 ⏳ Installing Docker...
 # Executing docker install script, commit: 53a22f61c0628e58e1d6680b49e82993d304b449
@@ -142,9 +141,6 @@ WARNING: Access to the remote API on a privileged Docker daemon is equivalent
 ✓ uncloud-uninstall script installed: /usr/local/bin/uncloud-uninstall
 ✓ Systemd unit file created: /etc/systemd/system/uncloud.service
 Created symlink /etc/systemd/system/multi-user.target.wants/uncloud.service → /etc/systemd/system/uncloud.service.
-⏳ Downloading uncloud-corrosion binary: https://github.com/psviderski/corrosion/releases/latest/download/corrosion-x86_64-unknown-linux-gnu.tar.gz
-✓ uncloud-corrosion binary installed: /usr/local/bin/uncloud-corrosion
-✓ Systemd unit file created: /etc/systemd/system/uncloud-corrosion.service
 ⏳ Starting Uncloud machine daemon (uncloud.service)...
 ✓ Uncloud machine daemon started.
 ✓ Uncloud installed on the machine successfully! 🎉
@@ -382,12 +378,13 @@ Possible reasons for having these kinds of units are:
 ✓ Systemd services stopped.
 ⏳ Removing systemd service files...
 removed '/etc/systemd/system/uncloud.service'
-removed '/etc/systemd/system/uncloud-corrosion.service'
 ✓ Systemd service files removed.
 ⏳ Removing binaries...
 removed '/usr/local/bin/uncloudd'
-removed '/usr/local/bin/uncloud-corrosion'
 ✓ Binaries removed.
+⏳ Removing uncloudd-managed corrosion Docker container...
+uncloud-corrosion
+✓ uncloud-corrosion container removed.
 ⏳ Removing data and run directories...
 removed '/var/lib/uncloud/machine.db-wal'
 removed '/var/lib/uncloud/caddy/caddy/autosave.json'

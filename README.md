@@ -154,7 +154,6 @@ Here is a diagram of an Uncloud multi-provider cluster of 3 machines:
 ```bash
 $ uc machine init --name oracle-vm ubuntu@152.67.101.197
 
-Downloading Uncloud install script: https://raw.githubusercontent.com/psviderski/uncloud/refs/heads/main/scripts/install.sh
 ⏳ Running Uncloud install script...
 ✓ Docker is already installed.
 ⏳ Installing Docker...
@@ -169,9 +168,6 @@ Downloading Uncloud install script: https://raw.githubusercontent.com/psviderski
 ✓ uncloud-uninstall script installed: /usr/local/bin/uncloud-uninstall
 ✓ Systemd unit file created: /etc/systemd/system/uncloud.service
 Created symlink /etc/systemd/system/multi-user.target.wants/uncloud.service → /etc/systemd/system/uncloud.service.
-⏳ Downloading uncloud-corrosion binary: https://github.com/psviderski/corrosion/releases/latest/download/corrosion-aarch64-unknown-linux-gnu.tar.gz
-✓ uncloud-corrosion binary installed: /usr/local/bin/uncloud-corrosion
-✓ Systemd unit file created: /etc/systemd/system/uncloud-corrosion.service
 ⏳ Starting Uncloud machine daemon (uncloud.service)...
 ✓ Uncloud machine daemon started.
 ✓ Uncloud installed on the machine successfully! 🎉
@@ -190,21 +186,20 @@ DNS records updated to use only the internet-reachable machines running caddy se
   *.xuw3xd.cluster.uncloud.run  A → 152.67.101.197
 ```
 
-1. The CLI SSHs into the machine and installs Docker, the `uncloudd` machine daemon and
-   [corrosion](https://github.com/superfly/corrosion) service, managed by systemd.
+1. The CLI SSHs into the machine and installs Docker and the `uncloudd` machine daemon, managed by systemd.
 2. Generates a unique WireGuard key pair, allocates a dedicated subnet `10.210.0.0/24` for the machine and its
    containers, and configures `uncloudd` accordingly. All subsequent communication happens with `uncloudd`
    through its gRPC API over SSH.
-3. Configures and starts `corrosion`, a CRDT-based distributed SQLite database to share cluster state between machines.
+3. Configures and starts [corrosion](https://github.com/superfly/corrosion), a CRDT-based distributed SQLite database to
+   share cluster state between machines, as a Docker container managed by `uncloudd`.
 4. Creates a Docker bridge network connected to the WireGuard interface.
-5. This machine becomes an entry point for the newly created cluster which is stored in the cluster config under
-   `~/.config/uncloud` on your local machine.
+5. This machine becomes an entry point for the newly created cluster. Its address is stored as a connection info in the
+   cluster config at `~/.config/uncloud/config.yaml` on your local machine.
 
 **When you add another machine:**
 
 ```bash
 $ uc machine add --name hetzner-server root@5.223.45.199
-Downloading Uncloud install script: https://raw.githubusercontent.com/psviderski/uncloud/refs/heads/main/scripts/install.sh
 ⏳ Running Uncloud install script...
 ✓ Docker is already installed.
 ✓ Linux user and group 'uncloud' created.
@@ -215,9 +210,6 @@ Downloading Uncloud install script: https://raw.githubusercontent.com/psviderski
 ✓ uncloud-uninstall script installed: /usr/local/bin/uncloud-uninstall
 ✓ Systemd unit file created: /etc/systemd/system/uncloud.service
 Created symlink /etc/systemd/system/multi-user.target.wants/uncloud.service → /etc/systemd/system/uncloud.service.
-⏳ Downloading uncloud-corrosion binary: https://github.com/psviderski/corrosion/releases/latest/download/corrosion-x86_64-unknown-linux-gnu.tar.gz
-✓ uncloud-corrosion binary installed: /usr/local/bin/uncloud-corrosion
-✓ Systemd unit file created: /etc/systemd/system/uncloud-corrosion.service
 ⏳ Starting Uncloud machine daemon (uncloud.service)...
 ✓ Uncloud machine daemon started.
 ✓ Uncloud installed on the machine successfully! 🎉
@@ -246,9 +238,10 @@ hetzner-server   Up      10.210.1.1/24   5.223.45.199     5.223.45.199:51820, [2
 3. Registers the second machine in the cluster state and exchanges WireGuard keys with the first machine.
 4. Both machines establish a WireGuard tunnel between each other, allowing Docker containers connected to the bridge
    network to communicate directly across machines.
-5. Configures and starts `corrosion` on the second machine to sync the cluster state.
+5. Configures and starts the `uncloud-corrosion` container on the second machine to sync the cluster state.
 6. The second machine is added as an alternative entry point in the cluster config.
-7. If one of the machines goes offline, the other machine can still serve cluster operations.
+7. If one of the machines goes offline, the other machine can still be used by `uc` to connect and run cluster
+   operations.
 
 If one more machine is added, the process repeats with a new subnet. The new machine needs to establish a WireGuard
 connection with only one of the existing machines. Other machines will learn about it through the shared cluster state
