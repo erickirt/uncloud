@@ -710,8 +710,7 @@
                                 <p class="font-inter-tight font-semibold text-violet-700 mb-1">Your most-needed
                                     feature</p>
                                 <p class="text-sm text-zinc-500 leading-relaxed">
-                                    Something missing from this list? Tell us about your pain and it moves up the
-                                    queue.</p>
+                                    Something missing from this list? Tell us about your pain.</p>
                             </div>
                         </a>
                     </div>
@@ -728,7 +727,11 @@
                         <div class="text-center pb-10 md:pb-14">
                             <h2 class="font-inter-tight text-3xl md:text-4xl font-bold text-zinc-900 mb-4">Fair
                                 questions</h2>
-                            <p class="text-lg text-zinc-500">Asked bluntly, answered bluntly.</p>
+                            <p class="text-lg text-zinc-500">
+                                Have another questions? Ask us on
+                                <a class="font-medium text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-zinc-900 hover:decoration-zinc-400 transition-colors"
+                                   href="https://uncloud.run/discord" target="_blank" rel="noopener">Discord</a>.
+                            </p>
                         </div>
 
                         <div class="divide-y divide-zinc-200 border-t border-b border-zinc-200">
@@ -746,9 +749,11 @@
                                     </span>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
-                                    No. Uncloud is fully functional on its own, today, from the CLI. Hub adds a web UI
-                                    and an observability stack on top. If you never connect Hub, you lose nothing that
-                                    exists now.
+                                    No. <a class="underline hover:text-zinc-900" href="/">Uncloud</a> is open source
+                                    and fully functional on its own without Hub. You can use
+                                    the CLI to manage your clusters and deploy your apps across servers from Compose
+                                    files. Hub adds a web UI and an observability stack on top so you don't have to
+                                    build and manage it yourself.
                                 </p>
                             </details>
 
@@ -766,7 +771,8 @@
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     No, and no point pretending otherwise. Uncloud, the orchestrator, is Apache 2.0. Hub
-                                    is a hosted service built on top.
+                                    is a managed service built on top, and it's how we plan to fund Uncloud's full-time
+                                    development.
                                 </p>
                             </details>
 
@@ -784,9 +790,10 @@
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     Metrics and logs will flow to Hub. Storing, graphing, and searching them is the
-                                    whole point of a hosted observability stack. Your apps, code, and databases stay on
-                                    your machines. What exactly gets collected and how you control it is being designed
-                                    right now, with early access users.
+                                    whole point of a hosted observability stack so you can access them even when your
+                                    servers aren't available. Your apps, code, and databases stay on your servers. What
+                                    exactly gets collected and how you control it is being designed right now, with
+                                    early access users.
                                 </p>
                             </details>
 
@@ -805,8 +812,9 @@
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     The connection model is being designed right now with early access users. The intent
                                     is the minimum Hub needs to do its job: telemetry flowing out, and nothing
-                                    controlling your cluster unless you later opt into features like push to deploy.
-                                    Uncloud itself never stops working without it.
+                                    controlling your cluster unless you later opt into features like sharing access to
+                                    the cluster with your team or push to deploy. Uncloud itself never stops working
+                                    without Hub.
                                 </p>
                             </details>
 
@@ -823,8 +831,8 @@
                                     </span>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
-                                    Nothing. Your apps run on your machines and Uncloud doesn't depend on Hub to
-                                    operate. Worst case, you lose the dashboard for a while. Not production.
+                                    Nothing. Your apps run on your servers and Uncloud doesn't depend on Hub to
+                                    operate. Worst case, you lose the dashboard for a while, not production.
                                 </p>
                             </details>
 
@@ -841,9 +849,9 @@
                                     </span>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
-                                    You can. Grafana, Prometheus, and Loki are excellent, and they'll always work with
-                                    Uncloud. Hub is for people who want the graphs without adopting a monitoring stack
-                                    as a second hobby. If you enjoy running one, genuinely, carry on.
+                                    You can and if you do already, keep it. Grafana, Prometheus, VictoriaMetrics and
+                                    others are excellent, and they'll always work with Uncloud. Hub is for the day you'd
+                                    rather ship features than manage and monitor the monitoring stack.
                                 </p>
                             </details>
 
@@ -860,9 +868,9 @@
                                     </span>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
-                                    No public date yet. Hub is in active development and everything on this page is a
-                                    design preview. Invites go to the early access list as pieces become usable. Pricing
-                                    isn't decided, and early access users will see it before anyone is charged a cent.
+                                    Hub is in active development and everything on this page is a design preview.
+                                    Invites go to the early access list as pieces become usable. Pricing isn't decided
+                                    yet, and early access users will get a discount for helping shape Hub.
                                 </p>
                             </details>
 
@@ -880,11 +888,11 @@
 
                         <div class="text-center pb-10">
                             <h2 class="font-inter-tight text-3xl md:text-4xl font-bold text-white mb-4">
-                                Get in before it's finished
+                                Get early access
                             </h2>
                             <p class="text-lg text-zinc-400">
-                                Tell Pasha what you need Hub to do. The roadmap is short enough that one email actually
-                                moves it.
+                                Leave your email and we'll invite you as Hub becomes usable. Early users help shape it
+                                and get a discount.
                             </p>
                         </div>
 
@@ -911,10 +919,11 @@
                             </button>
                         </form>
 
-                        <p class="text-center text-sm text-zinc-400 mt-6">
-                            No spam, no drip campaign. One person reads these.
-                            Or email <a href="mailto:pasha@uncloud.run"
-                                        class="underline hover:text-white transition">pasha@uncloud.run</a> directly.
+                        <p class="text-center text-sm text-zinc-500 mt-6">
+                            Uncloud updates only, no spam. Or email
+                            <a href="mailto:pasha@uncloud.run"
+                               class="underline text-zinc-400 hover:text-white transition">pasha@uncloud.run</a>
+                            directly.
                         </p>
 
                     </div>
@@ -941,7 +950,7 @@
                     </div>
                     <div class="grow text-sm text-zinc-500">
                         Made with ❤️ by
-                        <a class="underline hover:text-zinc-900" href="https://github.com/unlabs-dev">unLabs</a>
+                        <a class="underline hover:text-zinc-900" href="https://github.com/unlabs-dev">Unlabs</a>
                         in Australia
                     </div>
 
