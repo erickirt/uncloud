@@ -32,64 +32,6 @@
           content="Uncloud Hub will add a dashboard, metrics, logs, and alerts to the Uncloud clusters you already run. Skip the weekend of wiring Prometheus, Loki, and Grafana. Join the early access list.">
     <meta name="twitter:image" content="https://uncloud.run/images/logo-wide.png">
     <meta name="twitter:image:alt" content="Uncloud Hub - Observability for self-hosted apps">
-    <style>
-        /* Prevent decorative inline SVGs from appearing full screen if styles fail to size them. */
-        svg {
-            max-width: 24px;
-            max-height: 24px;
-        }
-
-        /* Decorative SVGs opt out of the guard above. */
-        svg.svg-free {
-            max-width: none;
-            max-height: none;
-        }
-
-        /* Handwritten note variant for dark sections (overrides the .hw-note color). */
-        .hw-note-light {
-            color: #a1a1aa;
-        }
-
-        /* Red marker highlight: a hand-swiped stroke with uneven rounded edges.
-           The isolation keeps the negative z-index swipe above section backgrounds. */
-        .marker-red {
-            position: relative;
-            white-space: nowrap;
-            color: #fff;
-            isolation: isolate;
-        }
-
-        .marker-red::before {
-            content: "";
-            position: absolute;
-            z-index: -1;
-            inset: 0.08em -0.18em -0.02em -0.14em;
-            background: linear-gradient(100deg,
-            rgba(220, 38, 38, 0.82) 0%,
-            rgba(239, 68, 68, 0.95) 28%,
-            rgba(225, 29, 72, 0.9) 72%,
-            rgba(220, 38, 38, 0.88) 100%);
-            border-radius: 0.3em 0.5em 0.4em 0.6em;
-            transform: skew(-10deg) rotate(-0.5deg);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Hide the default disclosure marker on FAQ items across browsers. */
-        details.faq-item > summary {
-            list-style: none;
-        }
-
-        details.faq-item > summary::-webkit-details-marker {
-            display: none;
-        }
-
-        details.faq-item[open] .faq-plus {
-            transform: rotate(45deg);
-        }
-    </style>
 </head>
 
 <body class="font-inter antialiased bg-white text-zinc-900 tracking-tight">
@@ -174,12 +116,9 @@
         <section
                 class="relative before:absolute before:inset-0 before:h-80 before:pointer-events-none before:bg-gradient-to-b before:from-zinc-100 before:-z-10">
             <div class="pt-32 pb-12 md:pt-40 md:pb-20">
-                <!-- Section content -->
                 <div class="px-4 sm:px-6">
                     <div class="max-w-3xl mx-auto">
                         <div class="text-center pb-12 md:pb-16">
-                            <!-- Eyebrow -->
-                            <!-- Eyebrow: quiet tracked mono kicker, no container. -->
                             <p class="mb-5 font-mono text-xs font-medium uppercase tracking-[0.25em] text-violet-600">
                                 Coming soon
                             </p>
@@ -215,7 +154,8 @@
                     <div class="flex justify-center relative before:absolute before:-top-12 before:w-96 before:h-96 before:bg-violet-700 before:opacity-[.15] before:rounded-full before:blur-3xl before:-z-10">
                         <div class="hidden md:block absolute -top-9 left-16 lg:left-32 z-10">
                             <span class="hw-note inline-block -rotate-3 text-zinc-600">your whole cluster on one screen</span>
-                            <svg class="svg-free inline-block w-10 h-10 ml-1 translate-y-4 text-zinc-400"
+                            <svg class="inline-block w-10 h-10 ml-1 translate-y-4 text-zinc-400"
+                                 width="40" height="40"
                                  viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path d="M4 6c14 2 26 10 30 28M34 34l-8-3.5M34 34l1.5-8.5" stroke="currentColor"
                                       stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -264,7 +204,7 @@
                         <a href="https://uncloud.run/discord" target="_blank" rel="noopener"
                            class="group block relative text-center md:px-5 after:hidden md:after:block after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:w-px after:h-8 after:border-l after:border-zinc-300 after:border-dashed last:after:hidden">
                             <h4 class="font-inter-tight text-2xl md:text-3xl font-bold tabular-nums mb-2"><span
-                                    x-data="counter(380)" x-text="counterValue">380</span></h4>
+                                    x-data="counter(390)" x-text="counterValue">390</span>+</h4>
                             <p class="text-zinc-500 transition-colors group-hover:text-zinc-800">Discord
                                 members</p>
                         </a>
@@ -275,7 +215,7 @@
             </div>
         </section>
 
-        <!-- Day-2 problem: deploying is the easy part, running it is the job. -->
+        <!-- Day-2 problem -->
         <section id="not-done" class="relative bg-zinc-900">
             <div class="py-12 md:py-20">
                 <div class="max-w-6xl mx-auto px-4 sm:px-6">
@@ -290,11 +230,9 @@
                         </p>
                     </div>
 
-                    <!-- Launch checklist: setup complete, running it wide open. -->
                     <div class="max-w-xl mx-auto">
                         <div class="rounded-2xl border border-zinc-700/60 bg-zinc-950 overflow-hidden">
 
-                            <!-- The easy part: checked off. -->
                             <ul class="px-5 sm:px-8 py-6 space-y-4">
                                 <li class="flex items-center gap-3.5">
                                     <span class="w-7 flex items-center justify-center shrink-0"
@@ -330,7 +268,6 @@
                                 </li>
                             </ul>
 
-                            <!-- Divider: where the setup guide ends and running in production begins. -->
                             <div class="relative">
                                 <hr class="border-t border-dashed border-zinc-700" aria-hidden="true">
                                 <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border border-red-500/30 bg-[#200f11] px-3 py-1 font-inter-tight text-[11px] font-semibold uppercase tracking-widest text-red-400">
@@ -338,7 +275,6 @@
                                 </span>
                             </div>
 
-                            <!-- The real work: still open questions. -->
                             <ul class="px-5 sm:px-8 pt-8 pb-6 space-y-4 bg-red-500/5">
                                 <li class="flex items-center gap-3.5">
                                     <span class="w-7 flex items-center justify-center shrink-0 text-lg font-semibold text-red-400 leading-none"
@@ -370,8 +306,9 @@
 
                         <!-- Handwritten bridge: an arrow from the note up into the open questions. -->
                         <p class="relative text-center mt-5">
-                            <span class="hw-note hw-note-light inline-block -rotate-2">that's what Hub is for</span>
-                            <svg class="svg-free absolute left-1/2 bottom-1 ml-[7.5rem] w-12 h-24 text-zinc-400"
+                            <span class="hw-note inline-block -rotate-2 text-zinc-400">that's what Hub is for</span>
+                            <svg class="absolute left-1/2 bottom-1 ml-[6rem] w-12 h-24 text-zinc-400"
+                                 width="48" height="96"
                                  viewBox="0 0 48 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path d="M4 88c24-4 40-28 26-76M30 12l-2.5 8.5M30 12l6.5 6" stroke="currentColor"
                                       stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -383,7 +320,7 @@
             </div>
         </section>
 
-        <!-- Dashboard overview: what Hub shows you. -->
+        <!-- Dashboard overview -->
         <section class="relative bg-white">
             <div class="py-12 md:py-20">
                 <div class="max-w-6xl mx-auto px-4 sm:px-6">
@@ -452,7 +389,7 @@
                         <!-- Right: dashboard screenshot -->
                         <div>
                             <div class="rounded-2xl overflow-hidden border border-zinc-200 shadow-xl shadow-zinc-950/10">
-                                <img src="images/dashboard-overview.png" width="2880" height="1960"
+                                <img src="images/hub-overview.webp" width="2560" height="1742"
                                      alt="Uncloud Hub cluster overview dashboard, design preview" class="w-full block">
                             </div>
                         </div>
@@ -461,7 +398,7 @@
             </div>
         </section>
 
-        <!-- Value stack: what you get. -->
+        <!-- Value stack -->
         <section class="relative bg-zinc-50">
             <div class="py-12 md:py-20">
                 <div class="max-w-6xl mx-auto px-4 sm:px-6">
@@ -649,7 +586,7 @@
                             <h3 class="font-inter-tight font-semibold text-zinc-900 mb-2">Monitor everything</h3>
                             <p class="text-sm text-zinc-500 leading-relaxed">
                                 Explore your cluster, services, metrics, and logs in one place. See how each deploy
-                                behaves in production, and let alerts find you when something needs attention.
+                                behaves in production, and receive alerts when something needs attention.
                             </p>
                         </div>
                     </div>
@@ -736,17 +673,15 @@
 
                         <div class="divide-y divide-zinc-200 border-t border-b border-zinc-200">
 
-                            <details class="faq-item group">
-                                <summary class="flex items-center justify-between gap-4 py-5 cursor-pointer">
-                                    <span class="font-inter-tight font-semibold text-zinc-900">Do I need Hub to use Uncloud?</span>
-                                    <span class="faq-plus shrink-0 text-zinc-400 transition-transform"
-                                          aria-hidden="true">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                             stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12"
-                                                                                           y2="19"/><line x1="5" y1="12"
-                                                                                                          x2="19"
-                                                                                                          y2="12"/></svg>
-                                    </span>
+                            <details class="group">
+                                <summary
+                                        class="flex items-center justify-between gap-4 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden font-inter-tight font-semibold text-zinc-900">
+                                    <span>Do I need Hub to use Uncloud?</span>
+                                    <svg class="w-5 h-5 shrink-0 text-zinc-400 transition-transform duration-200 group-open:rotate-45"
+                                         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                         aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
+                                    </svg>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     No. <a class="underline hover:text-zinc-900" href="/">Uncloud</a> is open source
@@ -757,17 +692,15 @@
                                 </p>
                             </details>
 
-                            <details class="faq-item group">
-                                <summary class="flex items-center justify-between gap-4 py-5 cursor-pointer">
-                                    <span class="font-inter-tight font-semibold text-zinc-900">Is Hub open source too?</span>
-                                    <span class="faq-plus shrink-0 text-zinc-400 transition-transform"
-                                          aria-hidden="true">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                             stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12"
-                                                                                           y2="19"/><line x1="5" y1="12"
-                                                                                                          x2="19"
-                                                                                                          y2="12"/></svg>
-                                    </span>
+                            <details class="group">
+                                <summary
+                                        class="flex items-center justify-between gap-4 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden font-inter-tight font-semibold text-zinc-900">
+                                    <span>Is Hub open source too?</span>
+                                    <svg class="w-5 h-5 shrink-0 text-zinc-400 transition-transform duration-200 group-open:rotate-45"
+                                         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                         aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
+                                    </svg>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     No, and no point pretending otherwise. Uncloud, the orchestrator, is Apache 2.0. Hub
@@ -776,17 +709,15 @@
                                 </p>
                             </details>
 
-                            <details class="faq-item group">
-                                <summary class="flex items-center justify-between gap-4 py-5 cursor-pointer">
-                                    <span class="font-inter-tight font-semibold text-zinc-900">What data leaves my machines?</span>
-                                    <span class="faq-plus shrink-0 text-zinc-400 transition-transform"
-                                          aria-hidden="true">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                             stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12"
-                                                                                           y2="19"/><line x1="5" y1="12"
-                                                                                                          x2="19"
-                                                                                                          y2="12"/></svg>
-                                    </span>
+                            <details class="group">
+                                <summary
+                                        class="flex items-center justify-between gap-4 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden font-inter-tight font-semibold text-zinc-900">
+                                    <span>What data leaves my machines?</span>
+                                    <svg class="w-5 h-5 shrink-0 text-zinc-400 transition-transform duration-200 group-open:rotate-45"
+                                         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                         aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
+                                    </svg>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     Metrics and logs will flow to Hub. Storing, graphing, and searching them is the
@@ -797,17 +728,15 @@
                                 </p>
                             </details>
 
-                            <details class="faq-item group">
-                                <summary class="flex items-center justify-between gap-4 py-5 cursor-pointer">
-                                    <span class="font-inter-tight font-semibold text-zinc-900">What access does Hub get to my cluster?</span>
-                                    <span class="faq-plus shrink-0 text-zinc-400 transition-transform"
-                                          aria-hidden="true">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                             stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12"
-                                                                                           y2="19"/><line x1="5" y1="12"
-                                                                                                          x2="19"
-                                                                                                          y2="12"/></svg>
-                                    </span>
+                            <details class="group">
+                                <summary
+                                        class="flex items-center justify-between gap-4 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden font-inter-tight font-semibold text-zinc-900">
+                                    <span>What access does Hub get to my cluster?</span>
+                                    <svg class="w-5 h-5 shrink-0 text-zinc-400 transition-transform duration-200 group-open:rotate-45"
+                                         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                         aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
+                                    </svg>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     The connection model is being designed right now with early access users. The intent
@@ -818,17 +747,15 @@
                                 </p>
                             </details>
 
-                            <details class="faq-item group">
-                                <summary class="flex items-center justify-between gap-4 py-5 cursor-pointer">
-                                    <span class="font-inter-tight font-semibold text-zinc-900">What happens to my apps if Hub goes down?</span>
-                                    <span class="faq-plus shrink-0 text-zinc-400 transition-transform"
-                                          aria-hidden="true">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                             stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12"
-                                                                                           y2="19"/><line x1="5" y1="12"
-                                                                                                          x2="19"
-                                                                                                          y2="12"/></svg>
-                                    </span>
+                            <details class="group">
+                                <summary
+                                        class="flex items-center justify-between gap-4 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden font-inter-tight font-semibold text-zinc-900">
+                                    <span>What happens to my apps if Hub goes down?</span>
+                                    <svg class="w-5 h-5 shrink-0 text-zinc-400 transition-transform duration-200 group-open:rotate-45"
+                                         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                         aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
+                                    </svg>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     Nothing. Your apps run on your servers and Uncloud doesn't depend on Hub to
@@ -836,17 +763,15 @@
                                 </p>
                             </details>
 
-                            <details class="faq-item group">
-                                <summary class="flex items-center justify-between gap-4 py-5 cursor-pointer">
-                                    <span class="font-inter-tight font-semibold text-zinc-900">Why not just run my own Grafana stack?</span>
-                                    <span class="faq-plus shrink-0 text-zinc-400 transition-transform"
-                                          aria-hidden="true">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                             stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12"
-                                                                                           y2="19"/><line x1="5" y1="12"
-                                                                                                          x2="19"
-                                                                                                          y2="12"/></svg>
-                                    </span>
+                            <details class="group">
+                                <summary
+                                        class="flex items-center justify-between gap-4 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden font-inter-tight font-semibold text-zinc-900">
+                                    <span>Why not just run my own Grafana stack?</span>
+                                    <svg class="w-5 h-5 shrink-0 text-zinc-400 transition-transform duration-200 group-open:rotate-45"
+                                         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                         aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
+                                    </svg>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     You can and if you do already, keep it. Grafana, Prometheus, VictoriaMetrics and
@@ -855,17 +780,15 @@
                                 </p>
                             </details>
 
-                            <details class="faq-item group">
-                                <summary class="flex items-center justify-between gap-4 py-5 cursor-pointer">
-                                    <span class="font-inter-tight font-semibold text-zinc-900">When can I use it, and what will it cost?</span>
-                                    <span class="faq-plus shrink-0 text-zinc-400 transition-transform"
-                                          aria-hidden="true">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                             stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12"
-                                                                                           y2="19"/><line x1="5" y1="12"
-                                                                                                          x2="19"
-                                                                                                          y2="12"/></svg>
-                                    </span>
+                            <details class="group">
+                                <summary
+                                        class="flex items-center justify-between gap-4 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden font-inter-tight font-semibold text-zinc-900">
+                                    <span>When can I use it, and what will it cost?</span>
+                                    <svg class="w-5 h-5 shrink-0 text-zinc-400 transition-transform duration-200 group-open:rotate-45"
+                                         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                         aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
+                                    </svg>
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     Hub is in active development and everything on this page is a design preview.
