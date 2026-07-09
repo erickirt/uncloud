@@ -18,6 +18,10 @@
     }
 
     root * /usr/share/caddy
+
+    # Serve clean URLs for landing pages, e.g. /hub -> hub.html.
+    try_files {path}.html
+
     file_server
     log
 }

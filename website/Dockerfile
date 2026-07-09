@@ -28,4 +28,4 @@ COPY --from=prod /opt/docusaurus/build /usr/share/caddy
 # Copy the landing page assets.
 COPY landing/images /usr/share/caddy/images
 COPY landing/js /usr/share/caddy/js
-COPY landing/index.html landing/style.css /usr/share/caddy/
+COPY landing/index.html landing/hub.html landing/style.css /usr/share/caddy/
