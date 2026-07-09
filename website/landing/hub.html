@@ -5,20 +5,20 @@
     <meta charset="utf-8">
     <title>Uncloud Hub | The observability stack you never have to build</title>
     <meta name="description"
-          content="Uncloud Hub will add a dashboard, metrics, logs, and alerts to the Uncloud clusters you already run. Skip the weekend of wiring Prometheus, Loki, and Grafana. Join the early access list.">
+          content="Uncloud Hub connects to your Uncloud clusters and gives you a dashboard, metrics, logs, and alerts out of the box. See what's happening in production to catch issues early and fix faster. ">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="canonical" href="https://uncloud.run/hub">
     <link href="./style.css" rel="stylesheet">
     <link rel="apple-touch-icon" href="./images/apple-touch-icon.png" sizes="180x180"/>
     <link rel="icon" type="image/svg+xml" href="./images/logo.svg"/>
     <link rel="alternate icon" type="image/png" href="./images/favicon.png" sizes="96x96"/>
 
     <!-- OpenGraph tags for social media -->
-    <meta property="og:title"
-          content="Uncloud Hub | The observability stack you never have to build"/>
+    <meta property="og:title" content="Uncloud Hub: the observability stack for your Uncloud clusters"/>
     <meta property="og:description"
-          content="Uncloud Hub will add a dashboard, metrics, logs, and alerts to the Uncloud clusters you already run. Skip the weekend of wiring Prometheus, Loki, and Grafana. Join the early access list."/>
-    <meta property="og:image" content="https://uncloud.run/images/logo-wide.png"/>
-    <meta property="og:image:alt" content="Uncloud Hub - Observability for self-hosted apps"/>
+          content="Uncloud Hub connects to your Uncloud clusters and gives you a dashboard, metrics, logs, and alerts out of the box. See what's happening in production to catch issues early and fix faster."/>
+    <meta property="og:image" content="https://uncloud.run/images/og-hub.png"/>
+    <meta property="og:image:alt" content="Uncloud Hub: the observability stack you never have to build"/>
     <meta property="og:url" content="https://uncloud.run/hub"/>
     <meta property="og:type" content="website"/>
     <meta property="og:site_name" content="Uncloud"/>
@@ -26,12 +26,11 @@
     <meta property="twitter:domain" content="uncloud.run">
     <meta property="twitter:url" content="https://uncloud.run/hub">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title"
-          content="Uncloud Hub | The observability stack you never have to build">
+    <meta name="twitter:title" content="Uncloud Hub: the observability stack for your Uncloud clusters">
     <meta name="twitter:description"
-          content="Uncloud Hub will add a dashboard, metrics, logs, and alerts to the Uncloud clusters you already run. Skip the weekend of wiring Prometheus, Loki, and Grafana. Join the early access list.">
-    <meta name="twitter:image" content="https://uncloud.run/images/logo-wide.png">
-    <meta name="twitter:image:alt" content="Uncloud Hub - Observability for self-hosted apps">
+          content="Uncloud Hub connects to your Uncloud clusters and gives you a dashboard, metrics, logs, and alerts out of the box. See what's happening in production to catch issues early and fix faster. ">
+    <meta name="twitter:image" content="https://uncloud.run/images/og-hub.png">
+    <meta name="twitter:image:alt" content="Uncloud Hub: the observability stack you never have to build">
 
     <script src="./js/posthog.js" defer></script>
 </head>
@@ -62,7 +61,7 @@
                             <a class="text-sm font-medium text-zinc-500 hover:text-zinc-900 px-2 sm:px-5 py-2 transition inline-flex items-center"
                                href="/hub">
                                 Hub
-                                <span class="inline-block ml-1 -translate-y-1.5 -rotate-[8deg] text-[10px] font-semibold uppercase tracking-wide text-violet-700 bg-violet-100 px-1.5 py-0.5 rounded">
+                                <span class="inline-block ml-1 -translate-y-1.5 text-[10px] font-semibold uppercase tracking-wide text-violet-700 bg-violet-100 px-1.5 py-0.5 rounded">
                                     New
                                 </span>
                             </a>
@@ -569,6 +568,11 @@
                                 hub connect</code> on the
                                 cluster you already have. Its machines and services will appear in the dashboard. Your
                                 deploy flow doesn't change.
+                                <br>
+                                No cluster yet?
+                                <a class="underline hover:text-zinc-900"
+                                   href="/docs/getting-started/deploy-demo-app">Create your first cluster</a>
+                                on any server in a few minutes.
                             </p>
                         </div>
                         <div class="text-center md:text-left">
@@ -623,8 +627,8 @@
                                       aria-hidden="true"></span>
                                 <div>
                                     <p class="font-inter-tight font-semibold text-zinc-900 mb-1">Team access</p>
-                                    <p class="text-sm text-zinc-500 leading-relaxed">Share cluster access with your team
-                                        without handing out SSH keys or root credentials.</p>
+                                    <p class="text-sm text-zinc-500 leading-relaxed">Share cluster access with your
+                                        team using granular roles without handing out SSH keys or root credentials.</p>
                                 </div>
                             </li>
                             <li class="py-5 border-b border-zinc-200 flex items-start gap-4">
@@ -686,10 +690,10 @@
                                 </summary>
                                 <p class="text-zinc-500 leading-relaxed pb-5">
                                     No. <a class="underline hover:text-zinc-900" href="/">Uncloud</a> is open source
-                                    and fully functional on its own without Hub. You can use
-                                    the CLI to manage your clusters and deploy your apps across servers from Compose
-                                    files. Hub adds a web UI and an observability stack on top so you don't have to
-                                    build and manage it yourself.
+                                    and fully functional on its own without Hub. You can use the CLI to manage your
+                                    clusters and deploy your apps across servers from Compose files. You keep full
+                                    control over your servers. Hub adds a web UI and an observability stack on top so
+                                    you don't have to build and manage one yourself.
                                 </p>
                             </details>
 
@@ -893,7 +897,7 @@
                 <div class="sm:col-span-6 md:col-span-6 lg:col-span-8 max-md:order-1 flex flex-col">
                     <div class="mb-4">
                         <!-- Logo -->
-                        <a class="flex items-center" href="index.html">
+                        <a class="flex items-center" href="/">
                             <img class="w-8 h-8 rounded shadow-sm shadow-zinc-950/20" src="./images/logo.svg"
                                  alt="Logo">
                             <span class="ml-2 font-semibold text-lg text-zinc-900">uncloud</span>
