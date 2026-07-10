@@ -287,7 +287,7 @@ Wants=network-online.target
 [Service]
 Type=notify
 ExecStart=${INSTALL_BIN_DIR}/uncloudd
-TimeoutStartSec=15
+TimeoutStartSec=20
 Restart=always
 RestartSec=2
 

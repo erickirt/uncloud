@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/containerd/errdefs"
+	systemd "github.com/coreos/go-systemd/daemon"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/api/types/mount"
@@ -22,6 +23,13 @@ const (
 	Image = "ghcr.io/unlabs-dev/corrosion:2026.6.15"
 	// ContainerName is the name of the managed Corrosion container.
 	ContainerName = "uncloud-corrosion"
+
+	// systemdStartTimeoutExtension is the duration of each systemd service start timeout extension that prevents
+	// a slow image pull from exceeding the start timeout (TimeoutStartSec). Extensions are a no-op if Corrosion
+	// is not starting during a systemd service startup.
+	systemdStartTimeoutExtension = 30 * time.Second
+	// systemdStartTimeoutExtendMax caps the total duration the start timeout can be extended for.
+	systemdStartTimeoutExtendMax = 5 * time.Minute
 )
 
 type DockerService struct {
@@ -175,8 +183,14 @@ func (s *DockerService) createAndStart(ctx context.Context) error {
 		}
 		defer respBody.Close()
 
+		// The pull on the first daemon start may take longer than the systemd service start timeout (TimeoutStartSec)
+		// on a slow connection. Keep extending the timeout while the pull is in progress so systemd doesn't kill
+		// the daemon before it reports readiness. This is a no-op if not running under systemd.
+		stopExtending := extendSystemdStartTimeout(ctx)
 		// Wait for pull to complete.
-		if _, err := io.Copy(io.Discard, respBody); err != nil {
+		_, err = io.Copy(io.Discard, respBody)
+		stopExtending()
+		if err != nil {
 			return fmt.Errorf("read pull response: %w", err)
 		}
 		slog.Info("Docker image pulled.", "image", s.Image, "duration", time.Since(start).String())
@@ -191,4 +205,41 @@ func (s *DockerService) createAndStart(ctx context.Context) error {
 		return fmt.Errorf("start container: %w", err)
 	}
 	return nil
+}
+
+// extendSystemdStartTimeout periodically asks systemd to extend the service start timeout, for up to
+// systemdStartTimeoutExtendMax. The returned function stops the extensions. It is a no-op when the service
+// is not running under systemd (NOTIFY_SOCKET is not set).
+func extendSystemdStartTimeout(ctx context.Context) (stop context.CancelFunc) {
+	ctx, cancel := context.WithCancel(ctx)
+
+	go func() {
+		// Send extensions more frequently than they expire so a single missed tick doesn't time out the start.
+		ticker := time.NewTicker(systemdStartTimeoutExtension / 3)
+		defer ticker.Stop()
+		deadline := time.Now().Add(systemdStartTimeoutExtendMax)
+
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				if time.Now().After(deadline) {
+					slog.Warn("Stopped extending the systemd service start timeout: corrosion service is taking "+
+						"too long to start.", "timeout", systemdStartTimeoutExtendMax)
+					return
+				}
+				msg := fmt.Sprintf("EXTEND_TIMEOUT_USEC=%d", systemdStartTimeoutExtension.Microseconds())
+				if _, err := systemd.SdNotify(false, msg); err != nil {
+					slog.Warn("Failed to extend the systemd service start timeout when starting corrosion service.",
+						"err", err)
+					return
+				}
+				slog.Info("Extended systemd service start timeout while corrosion service is starting.",
+					"duration", systemdStartTimeoutExtension)
+			}
+		}
+	}()
+
+	return cancel
 }
