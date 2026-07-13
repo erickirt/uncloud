@@ -738,10 +738,6 @@ prod-3  201.45.91.123:51820  1m56s ago  11ms   5.12MB    9.34MB
                                 <a class="text-sm font-medium text-violet-700 hover:text-violet-900 transition"
                                    href="/hub#early-access">Get early access &rarr;</a>
                             </div>
-                            <p class="mt-5 text-sm text-zinc-500">
-                                Hub is how we plan to fund Uncloud's full-time development.<br>
-                                Uncloud itself stays Apache 2.0 and works fully without Hub.
-                            </p>
                         </div>
 
                         <div class="lg:col-start-1 lg:row-start-1 rounded-xl overflow-hidden border border-zinc-200 shadow-2xl shadow-zinc-950/10">
@@ -823,6 +819,24 @@ prod-3  201.45.91.123:51820  1m56s ago  11ms   5.12MB    9.34MB
                                     is just a CLI that connects to your cluster over SSH. Run <code>uc deploy</code>
                                     locally or in GitHub Actions to integrate with existing workflows.
                                     There are no agents to install and no pipelines to migrate.
+                                </p>
+                            </details>
+
+                            <details class="group">
+                                <summary
+                                        class="flex items-center justify-between gap-4 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden font-inter-tight font-semibold text-zinc-900">
+                                    <span>Do I need Hub to use Uncloud?</span>
+                                    <svg class="w-5 h-5 shrink-0 text-zinc-400 transition-transform duration-200 group-open:rotate-45"
+                                         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                         aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
+                                    </svg>
+                                </summary>
+                                <p class="text-zinc-500 leading-relaxed pb-5">
+                                    No, Uncloud is open source and fully functional on its own without Hub. You can use
+                                    the CLI to manage your clusters and deploy your apps across servers from Compose
+                                    files. You keep full control over your servers. Hub adds a web UI and an
+                                    observability stack on top so you don't have to build and manage one yourself.
                                 </p>
                             </details>
                         </div>
