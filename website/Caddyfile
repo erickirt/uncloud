@@ -1,5 +1,10 @@
 {
     admin off
+    servers {
+        # Trust the Uncloud ingress Caddy (cluster network) so the X-Forwarded-For chain it forwards
+        # is preserved and the real client IP is logged in the client_ip field.
+        trusted_proxies static 10.210.0.0/16
+    }
 }
 
 :8000 {
