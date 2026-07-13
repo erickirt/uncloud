@@ -14,33 +14,41 @@ Uncloud covers all the essentials for operating apps in production without overw
 traditional container orchestrators like Kubernetes or Swarm:
 
 * Initial machine and network setup
+* Building images and pushing them directly to your machines without a registry
 * Zero-downtime rolling deployments
 * Health checks and automatic restarts
-* Automatic HTTPS and reverse proxy configuration
 * Scaling services across multiple machines
 * Cross-machine service communication without exposing ports to the internet
 * DNS-based service discovery
+* Automatic HTTPS and reverse proxy configuration
 * Load balancing
 * Persistent storage
 
 ## Use cases
 
-Some of the common use cases Uncloud is a great fit for:
+Uncloud is a great fit for anything from production workloads to a single-server homelab:
 
-- **Self-hosting and Homelabs**: Run your self-hosted apps on your own hardware. Start with a single machine and add
-  more as your needs grow.
+- **Production web apps and SaaS**: Run your product on VMs from any cloud provider or your own servers with
+  zero-downtime rolling deployments, health checks, and automatic HTTPS. Spread replicas across multiple machines to
+  keep your app available even when a machine goes down.
 - **Outgrowing Docker Compose**: Level up your Docker Compose setup with zero-downtime deployments, replicas across
   multiple machines for improved reliability, cross-machine service communication, automated reverse proxy management,
   and more using the same Compose file.
-- **Small to medium web applications**: Deploy your SaaS product, websites, or personal projects with redundancy across
-  multiple machines for better reliability and your peace of mind.
-- **Hybrid setups (cloud + on-prem)**: Combine cloud VMs with on-premise for cost savings and data sovereignty — all
-  managed through the same interface.
+- **Moving off a cloud PaaS or Kubernetes**: Get a Heroku-like deployment workflow on your own servers, without the high
+  PaaS costs or the complexity of Kubernetes.
+- **Migrating from Docker Swarm**: Swarm has been in maintenance mode for years. Uncloud offers an actively developed
+  alternative that keeps the familiar Compose format and drops the manager quorum. You also get secure WireGuard
+  networking across machines, image push without a registry, and automatic reverse proxy management out of the box.
+- **Hybrid setups (cloud + on-prem)**: Combine cloud VMs with on-premise servers and distribute workloads for cost
+  savings and data sovereignty. For example, keep your database on your own hardware and scale web replicas out to cloud
+  VMs. Manage everything together through the same interface.
 - **Agencies and freelancers**: Host multiple client projects with proper isolation on shared infrastructure, optimising
   costs and resources.
 - **Edge computing**: Deploy applications closer to your users for lower latency and better performance.
-- **Dev/staging environments**: Spin up additional environments for development and testing that mirror production
-  reusing the same Compose configuration.
+- **Self-hosting and homelabs**: Run your self-hosted apps on your own hardware. Start with a single machine and add
+  more as your needs grow.
+- **Dev/staging environments**: Spin up additional environments for development and testing that mirror production,
+  using the same Compose configuration.
 
 ## What makes Uncloud special
 
@@ -69,10 +77,10 @@ Talos [KubeSpan](https://www.talos.dev/v1.10/talos-guides/network/kubespan/).
 
 ### Managed DNS service (optional)
 
-Uncloud can provide **managed DNS records** like `<service-name>.<cluster-id>.uncld.dev` for your public
-services through free [Uncloud DNS](https://github.com/psviderski/uncloud-dns) service. You can deploy a service and
-instantly access it from anywhere with a proper DNS name and HTTPS without any manual DNS configuration. This makes
-self-hosting much more accessible and simplifies the process of adding your own domain later.
+Uncloud can provide **managed DNS records** like `<service-name>.<cluster-id>.uncld.dev` for your public services
+through free [Uncloud DNS](https://github.com/psviderski/uncloud-dns) service. You can deploy a service and instantly
+access it from anywhere with a proper DNS name and HTTPS without any manual DNS configuration. This makes self-hosting
+much more accessible and simplifies the process of adding your own domain later.
 
 ### No complex orchestration
 
