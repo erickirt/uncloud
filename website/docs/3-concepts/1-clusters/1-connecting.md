@@ -1,6 +1,6 @@
 # Connecting to a cluster
 
-`uc` only needs to reach one machine to work with the entire cluster. That machine acts as an **entry point** and
+`uc` only needs to reach **one machine** to work with the entire cluster. That machine acts as an **entry point** and
 forwards requests to other machines as needed.
 
 `uc` stores **cluster contexts** and **connection details** in a [configuration file](../../7-cli-config-reference.md)
@@ -45,6 +45,27 @@ When you run a `uc` command, it determines which cluster to connect to using thi
 
 Once the context is resolved, `uc` tries each connection in the context's `connections` list in order until one
 succeeds.
+
+## User permissions on the machine
+
+When `uc` connects to a machine over SSH, it communicates with the Uncloud daemon through the Unix socket
+`/run/uncloud/uncloud.sock` on that machine. The daemon restricts access to the socket to the `root` user and members
+of the `uncloud` Linux group. This means your SSH user must be either `root` or a member of the `uncloud` group.
+
+In most cases you don't need to set this up manually. When you initialise or add a machine with a non-root user,
+`uc machine init` and `uc machine add` automatically add that user to the `uncloud` group during installation.
+
+If you want to connect with a different non-root user later, add them to the group on the machine:
+
+```shell
+sudo usermod -aG uncloud <username>
+```
+
+The group change only applies to new SSH sessions. If `uc` still fails with a permission denied error after adding the
+user, close any long-running SSH connections to the machine (for example, SSH ControlMaster sessions) and try again.
+
+The same requirement applies when running `uc` locally on a cluster machine with a `unix://` connection. The local user
+must be `root` or a member of the `uncloud` group.
 
 ## Global flags and environment variables
 
