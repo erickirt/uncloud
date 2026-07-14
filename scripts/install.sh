@@ -220,7 +220,7 @@ install_uncloud_binaries() {
                 # 0.20.0~nightly-abc < 0.20.0 < 0.21.0~nightly-def.
                 # latest_version is always a clean stable tag from releases/latest, so the substitution is one-sided.
                 local newest
-                newest=$(printf '%s\n%s\n' "${installed_version//-/~}" "${latest_version}" | sort -V | tail -n1)
+                newest=$(printf '%s\n%s\n' "${installed_version//-/\~}" "${latest_version}" | sort -V | tail -n1)
                 if [ "${newest}" = "${latest_version}" ]; then
                     log "⏳ Upgrading uncloudd ${installed_version} → ${latest_version}..."
                     uncloudd_url="${UNCLOUD_GITHUB_URL}/releases/download/v${latest_version}/${uncloudd_archive_name}"
