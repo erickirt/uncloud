@@ -12,7 +12,19 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'Uncloud',
   tagline: 'Self-host and scale web apps without Kubernetes complexity',
-  favicon: 'img/favicon.png',
+  // Use the SVG logo as the primary favicon with a PNG fallback to match the landing pages.
+  favicon: 'img/logo.svg',
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'alternate icon',
+        type: 'image/png',
+        href: '/img/favicon.png',
+        sizes: '96x96',
+      },
+    },
+  ],
 
   // Set the production url of your site here
   url: 'https://uncloud.run',
