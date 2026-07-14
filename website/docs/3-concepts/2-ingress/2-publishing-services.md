@@ -17,7 +17,7 @@ uc run -p app.example.com:8000/https app:latest
 
 ```
 [+] Running service app-mwng (replicated mode) 1/1
- ✔ Container app-mwng-6lub on machine-fnr9  Started
+ ✔ Container app-mwng-6lub on machine-fnr9  Running
 
 app-mwng endpoints:
  • https://app.example.com → :8000

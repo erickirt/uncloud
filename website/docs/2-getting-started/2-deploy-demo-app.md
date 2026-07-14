@@ -1,15 +1,19 @@
 # Deploy demo app
 
-In this guide, we'll deploy [Excalidraw](https://excalidraw.com) — a popular sketching and diagramming tool — to your
+In this guide, we'll deploy [Excalidraw](https://excalidraw.com), a popular sketching and diagramming tool, to your
 Linux server. You'll learn the **basics of Uncloud** and see how simple it is to **run web apps** on your own
 infrastructure with secure internet access.
 
 :::info NOTE
-To give you a chance to play with Uncloud without even leaving your browser or needing your own servers, we're providing interactive tutorials and playgrounds on the [iximiuz Labs](https://labs.iximiuz.com/) platform.
 
-You can follow [this tutorial](https://labs.iximiuz.com/tutorials/uncloud-create-cluster-ebebf72b) which walks you through creating a new cluster with two machines and then deploying a simple web service to it.
+To give you a chance to play with Uncloud without even leaving your browser or needing your own servers, we're providing
+interactive tutorials and playgrounds on the [iximiuz Labs](https://labs.iximiuz.com/) platform.
 
-You can also launch the [Uncloud playground](https://labs.iximiuz.com/playgrounds/uncloud-cluster-64523f7c) where you can play with an already initialized Uncloud cluster.
+You can follow [this tutorial](https://labs.iximiuz.com/tutorials/uncloud-create-cluster-ebebf72b) which walks you
+through creating a new cluster with two machines and then deploying a simple web service to it.
+
+You can also launch the [Uncloud playground](https://labs.iximiuz.com/playgrounds/uncloud-cluster-64523f7c) where you
+can play with an already initialised Uncloud cluster.
 :::
 
 ## Prerequisites
@@ -53,8 +57,7 @@ This command will:
 - Install the Uncloud daemon on your server
 - Create a Docker network for Uncloud-managed containers
 - Deploy [Caddy](https://caddyserver.com/) as your reverse proxy listening on host ports 80 and 443
-- Reserve a free `xxxxxx.uncld.dev` subdomain via the Uncloud managed DNS service and point it to your
-  server's IP
+- Reserve a free `xxxxxx.uncld.dev` subdomain via the Uncloud managed DNS service and point it to your server's IP
 
 All in about a minute!
 
@@ -148,17 +151,17 @@ Cluster initialised with machine 'machine-dc3c' and saved as context 'default' i
 Current cluster context is now 'default'.
 Waiting for the machine to be ready...
 
-Reserved cluster domain: 7za6s7.uncld.dev
-[+] Deploying service caddy 7/2
- ✔ Container caddy-d7uk on machine-dc3c     Started                                            6.1s
-   ✔ Image caddy:2.10.0 on machine-dc3c       Pulled                                           3.7s
+Reserved cluster domain: sh8hsb.uncld.dev
+[+] Deploying service caddy 2/2
+ ✔ Container caddy-d7uk on machine-dc3c     Running                                           11.1s
+   ✔ Image caddy:2.11.4 on machine-dc3c     Pulled                                             3.7s
 
 Updating cluster domain records in Uncloud DNS to point to machines running caddy service...
 [+] Verifying internet access to caddy service 1/1
  ✔ Machine machine-dc3c (157.180.72.195)  Reachable                                            0.7s
 
 DNS records updated to use only the internet-reachable machines running caddy service:
-  *.7za6s7.uncld.dev  A → 157.180.72.195
+  *.sh8hsb.uncld.dev  A → 157.180.72.195
 ```
 
 </details>
@@ -177,11 +180,11 @@ You'll see the progress of the deployment and the public URL where you can acces
 
 ```
 [+] Running service excalidraw (replicated mode) 2/2
- ✔ Container excalidraw-azpc on machine-dc3c  Started                       8.9s
+ ✔ Container excalidraw-azpc on machine-dc3c  Healthy                      37.1s
    ✔ Image excalidraw/excalidraw on machine-dc3c  Pulled                    4.7s
 
 excalidraw endpoints:
- • https://excalidraw.7za6s7.uncld.dev → :80
+ • https://excalidraw.sh8hsb.uncld.dev → :80
 ```
 
 ## Verify your deployment
@@ -193,12 +196,12 @@ uc inspect excalidraw
 ```
 
 ```
-ID:    4d2de1600b6ada221a03896cd388836c
-Name:  excalidraw
-Mode:  replicated
+Service ID: 4d2de1600b6ada221a03896cd388836c
+Name:       excalidraw
+Mode:       replicated
 
-CONTAINER ID   IMAGE                   CREATED              STATUS                        MACHINE
-fde7ac7f11ad   excalidraw/excalidraw   About a minute ago   Up About a minute (healthy)   machine-dc3c
+CONTAINER ID   IMAGE                          CREATED              STATUS                        IP ADDRESS   MACHINE
+fde7ac7f11ad   excalidraw/excalidraw:latest   About a minute ago   Up About a minute (healthy)   10.210.0.3   machine-dc3c
 ```
 
 In this example, the service has one container running on the machine `machine-dc3c` (our server). The container is up
@@ -211,9 +214,9 @@ uc ls
 ```
 
 ```
-NAME         MODE         REPLICAS   ENDPOINTS
-caddy        global       1
-excalidraw   replicated   1          https://excalidraw.7za6s7.uncld.dev → :80
+NAME         MODE         REPLICAS   IMAGE                          ENDPOINTS
+caddy        global       1          caddy:2.11.4
+excalidraw   replicated   1          excalidraw/excalidraw:latest   https://excalidraw.sh8hsb.uncld.dev → :80
 ```
 
 You can see `caddy` service listed here. That's your reverse proxy, running as a regular Uncloud service.
@@ -223,13 +226,32 @@ You can see `caddy` service listed here. That's your reverse proxy, running as a
 Open your browser and navigate to the URL shown in the endpoints. It may take a moment for Caddy to obtain a TLS
 certificate from Let's Encrypt. If it doesn't load immediately, wait a few seconds and try again.
 
-![Excalidraw running on Uncloud](./img/excalidraw-browser.png)
+![Excalidraw running on Uncloud](https://media.uncloud.run/docs/excalidraw-browser.webp)
 
 You now have:
 
 - Your **own Excalidraw instance** running on your server
 - A **public URL** with **automatic HTTPS** you can share with your team and friends
 - **Full control over your data** — no analytics or tracking
+
+## View service logs
+
+Want to see what's happening inside your service? Use the `uc logs` command to view logs from the service container:
+
+```shell
+uc logs excalidraw
+```
+
+```
+Jul 14 10:53:05.910 machine-dc3c excalidraw/fde7a ::1 - - [14/Jul/2026:00:53:05 +0000] "GET / HTTP/1.1" 200 6843 "-" "Wget" "-"
+Jul 14 10:53:31.456 machine-dc3c excalidraw/fde7a 10.210.0.2 - - [14/Jul/2026:00:53:31 +0000] "GET /sw.js HTTP/1.1" 200 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:150.0) Gecko/20100101 Firefox/150.0"
+```
+
+Add the `-f` flag to stream new logs in real-time. Press `Ctrl+C` to stop:
+
+```shell
+uc logs excalidraw -f
+```
 
 ## Convert to Docker Compose format
 
@@ -249,9 +271,9 @@ services:
 
 :::info note
 
-The `x-ports` key is an Uncloud-specific extension to the Compose file format. It allows you to specify ports that
-should be published as HTTP(S) endpoints. Uncloud automatically configures the reverse proxy (Caddy) to route traffic to
-these ports.
+The [`x-ports`](../8-compose-file-reference/2-extensions.md#x-ports) key is an Uncloud-specific extension to the Compose
+file format. It allows you to specify ports that should be published as HTTP(S) endpoints. Uncloud automatically
+configures the reverse proxy (Caddy) to route traffic to these ports.
 
 :::
 
@@ -270,27 +292,29 @@ We've successfully converted our deployment created with `uc run` to a Compose f
 
 ## Use your own domain
 
-Want to use your own domain, for example, `excalidraw.example.com` instead of `excalidraw.7za6s7.uncld.dev`?
+Want to use your own domain, for example, `excalidraw.example.com` instead of `excalidraw.sh8hsb.uncld.dev`?
 
 Add a CNAME record `excalidraw.example.com` in your DNS provider (Cloudflare, Namecheap, etc.) pointing to
-`excalidraw.7za6s7.uncld.dev`. Alternatively, you can add an A record pointing to your server's IP.
+`excalidraw.sh8hsb.uncld.dev`. Alternatively, you can add an A record pointing to your server's IP.
 
 :::info note
 
 These instructions set up your own domain **in addition to** the Uncloud managed DNS name
-`excalidraw.7za6s7.uncld.dev`.
+`excalidraw.sh8hsb.uncld.dev`.
 
 If you want to avoid the managed service altogether, add `--no-dns` to your `uc machine init` command, and point an A
-DNS record to your server(s)'s IP(s).
+DNS record to your servers' IPs.
 
 :::
 
 Then update the published port `80/https` in `compose.yaml` to use your domain:
 
 ```yaml title="compose.yaml"
-...
-x-ports:
-  - excalidraw.example.com:80/https
+services:
+  excalidraw:
+    image: excalidraw/excalidraw
+    x-ports:
+      - excalidraw.example.com:80/https
 ```
 
 Finally, deploy the changes:
@@ -300,25 +324,32 @@ uc deploy
 ```
 
 ```
-Deployment plan:
-- Deploy service [name=excalidraw]
-  - machine-dc3c: Run container [image=excalidraw/excalidraw]
-  - machine-dc3c: Remove container [name=excalidraw-azpc]
+Deployment plan
 
-Do you want to continue?
+context: default
 
-Choose [y/N]: y
-Chose: Yes!
+~ update service excalidraw
+  │   image: excalidraw/excalidraw:latest
+  │
+  ╰── +/- replace container excalidraw/fde7ac7f11ad on machine-dc3c
 
-[+] Deploying services 2/2
- ✔ Container excalidraw-0z12 on machine-dc3c  Started                       3.5s
- ✔ Container excalidraw-azpc on machine-dc3c  Removed                       3.4s
+──────────────────────────────────────────
+1 replace (start-first) · across 1 machine
+
+Proceed with deployment to default? [y/N] y
+
+[+] Deploying to default 2/2
+ ✔ Container excalidraw-0z12 on machine-dc3c          Healthy              30.6s
+ ✔ Container excalidraw/fde7ac7f11ad on machine-dc3c  Removed               0.4s
 ```
 
-Notice how Uncloud performed a **zero-downtime deployment** — it started the new container with the updated
-configuration before removing the old one. Your service stayed available throughout the update.
+Uncloud prints a deployment plan and asks for confirmation before making any changes. The plan says it will replace the
+running container with a new one using the
+[`start-first` order](../4-guides/1-deployments/4-rolling-deployments.md#update-order). This means Uncloud starts the
+new container with the updated configuration, waits for it to become healthy, and only then removes the old one. Your
+service stays available throughout the update. That's a **zero-downtime deployment**.
 
-Give it a moment for Caddy to obtain a TLS certificate, then visit https://excalidraw.example.com.
+Give it a moment for Caddy to obtain a TLS certificate, then visit https://excalidraw.example.com (use your own domain).
 
 ## Clean up
 
@@ -351,7 +382,7 @@ This command will:
 <summary>💡 Expand to see example output</summary>
 
 ```
-⚠️This script will uninstall Uncloud and remove ALL Uncloud managed containers on this machine.
+⚠️ This script will uninstall Uncloud and remove ALL Uncloud managed containers on this machine.
 The following actions will be performed:
 - Remove Uncloud systemd services
 - Remove Uncloud binaries and data
@@ -361,20 +392,7 @@ The following actions will be performed:
 - Remove Uncloud WireGuard interface
 Do you want to proceed with uninstallation? [y/N] y
 ⏳ Stopping systemd services...
-Removed "/etc/systemd/system/multi-user.target.wants/uncloud.service".
-The unit files have no installation config (WantedBy=, RequiredBy=, UpheldBy=,
-Also=, or Alias= settings in the [Install] section, and DefaultInstance= for
-template units). This means they are not meant to be enabled or disabled using systemctl.
-
-Possible reasons for having these kinds of units are:
-• A unit may be statically enabled by being symlinked from another unit's
-  .wants/, .requires/, or .upholds/ directory.
-• A unit's purpose may be to act as a helper for some other unit which has
-  a requirement dependency on it.
-• A unit may be started when needed via activation (socket, path, timer,
-  D-Bus, udev, scripted systemctl call, ...).
-• In case of template units, the unit is meant to be enabled with some
-  instance name specified.
+Removed /etc/systemd/system/multi-user.target.wants/uncloud.service.
 ✓ Systemd services stopped.
 ⏳ Removing systemd service files...
 removed '/etc/systemd/system/uncloud.service'
@@ -386,44 +404,61 @@ removed '/usr/local/bin/uncloudd'
 uncloud-corrosion
 ✓ uncloud-corrosion container removed.
 ⏳ Removing data and run directories...
-removed '/var/lib/uncloud/machine.db-wal'
-removed '/var/lib/uncloud/caddy/caddy/autosave.json'
-removed directory '/var/lib/uncloud/caddy/caddy'
-removed '/var/lib/uncloud/caddy/caddy.json'
-removed directory '/var/lib/uncloud/caddy'
-removed '/var/lib/uncloud/machine.json'
 removed '/var/lib/uncloud/machine.db-shm'
-removed '/var/lib/uncloud/corrosion/admin.sock'
-removed '/var/lib/uncloud/corrosion/config.toml'
-removed '/var/lib/uncloud/corrosion/subscriptions/b4e825113f1143e5b27715b62193a9f8/sub.sqlite-wal'
-removed '/var/lib/uncloud/corrosion/subscriptions/b4e825113f1143e5b27715b62193a9f8/sub.sqlite-shm'
-removed '/var/lib/uncloud/corrosion/subscriptions/b4e825113f1143e5b27715b62193a9f8/sub.sqlite'
-removed directory '/var/lib/uncloud/corrosion/subscriptions/b4e825113f1143e5b27715b62193a9f8'
-removed '/var/lib/uncloud/corrosion/subscriptions/5e04cbb20a2743c382cfbd4949922351/sub.sqlite'
-removed directory '/var/lib/uncloud/corrosion/subscriptions/5e04cbb20a2743c382cfbd4949922351'
-removed directory '/var/lib/uncloud/corrosion/subscriptions'
-removed '/var/lib/uncloud/corrosion/schema.sql'
-removed '/var/lib/uncloud/corrosion/store.db'
-removed directory '/var/lib/uncloud/corrosion'
 removed '/var/lib/uncloud/machine.db'
+removed '/var/lib/uncloud/corrosion/store.db'
+removed '/var/lib/uncloud/corrosion/subscriptions/754e24df40f8476389cf6dbfa7b542c8/sub.sqlite'
+removed directory '/var/lib/uncloud/corrosion/subscriptions/754e24df40f8476389cf6dbfa7b542c8'
+removed '/var/lib/uncloud/corrosion/subscriptions/125e6ada8eec4f3cad192e1890db55c2/sub.sqlite'
+removed directory '/var/lib/uncloud/corrosion/subscriptions/125e6ada8eec4f3cad192e1890db55c2'
+removed directory '/var/lib/uncloud/corrosion/subscriptions'
+removed '/var/lib/uncloud/corrosion/config.toml'
+removed '/var/lib/uncloud/corrosion/schema.sql'
+removed directory '/var/lib/uncloud/corrosion'
+removed '/var/lib/uncloud/machine.json'
+removed '/var/lib/uncloud/caddy/caddy.json'
+removed '/var/lib/uncloud/caddy/caddy/autosave.json'
+removed '/var/lib/uncloud/caddy/caddy/last_clean.json'
+removed directory '/var/lib/uncloud/caddy/caddy/locks'
+removed '/var/lib/uncloud/caddy/caddy/instance.uuid'
+removed '/var/lib/uncloud/caddy/caddy/acme/acme-staging-v02.api.letsencrypt.org-directory/users/default/default.json'
+removed '/var/lib/uncloud/caddy/caddy/acme/acme-staging-v02.api.letsencrypt.org-directory/users/default/default.key'
+removed directory '/var/lib/uncloud/caddy/caddy/acme/acme-staging-v02.api.letsencrypt.org-directory/users/default'
+removed directory '/var/lib/uncloud/caddy/caddy/acme/acme-staging-v02.api.letsencrypt.org-directory/users'
+removed directory '/var/lib/uncloud/caddy/caddy/acme/acme-staging-v02.api.letsencrypt.org-directory'
+removed '/var/lib/uncloud/caddy/caddy/acme/acme-v02.api.letsencrypt.org-directory/users/default/default.json'
+removed '/var/lib/uncloud/caddy/caddy/acme/acme-v02.api.letsencrypt.org-directory/users/default/default.key'
+removed directory '/var/lib/uncloud/caddy/caddy/acme/acme-v02.api.letsencrypt.org-directory/users/default'
+removed directory '/var/lib/uncloud/caddy/caddy/acme/acme-v02.api.letsencrypt.org-directory/users'
+removed directory '/var/lib/uncloud/caddy/caddy/acme/acme-v02.api.letsencrypt.org-directory/challenge_tokens'
+removed directory '/var/lib/uncloud/caddy/caddy/acme/acme-v02.api.letsencrypt.org-directory'
+removed directory '/var/lib/uncloud/caddy/caddy/acme'
+removed '/var/lib/uncloud/caddy/caddy/certificates/acme-v02.api.letsencrypt.org-directory/excalidraw.sh8hsb.uncld.dev/excalidraw.sh8hsb.uncld.dev.key'
+removed '/var/lib/uncloud/caddy/caddy/certificates/acme-v02.api.letsencrypt.org-directory/excalidraw.sh8hsb.uncld.dev/excalidraw.sh8hsb.uncld.dev.crt'
+removed '/var/lib/uncloud/caddy/caddy/certificates/acme-v02.api.letsencrypt.org-directory/excalidraw.sh8hsb.uncld.dev/excalidraw.sh8hsb.uncld.dev.json'
+removed directory '/var/lib/uncloud/caddy/caddy/certificates/acme-v02.api.letsencrypt.org-directory/excalidraw.sh8hsb.uncld.dev'
+removed directory '/var/lib/uncloud/caddy/caddy/certificates/acme-v02.api.letsencrypt.org-directory'
+removed directory '/var/lib/uncloud/caddy/caddy/certificates'
+removed directory '/var/lib/uncloud/caddy/caddy'
+removed '/var/lib/uncloud/caddy/Caddyfile'
+removed directory '/var/lib/uncloud/caddy'
+removed '/var/lib/uncloud/machine.db-wal'
 removed directory '/var/lib/uncloud'
+removed '/run/uncloud/caddy/admin.sock'
+removed directory '/run/uncloud/caddy'
+removed '/run/uncloud/corrosion/admin.sock'
+removed directory '/run/uncloud/corrosion'
 removed directory '/run/uncloud'
 ✓ Data and run directories removed.
 ⏳ Removing Linux user and group...
 ✓ Linux user 'uncloud' removed.
 Linux group 'uncloud' does not exist or was already removed.
 ⏳ Looking for Docker containers and network created by Uncloud...
-Found 4 Uncloud managed containers.
+Found 1 Uncloud managed containers.
 ⏳ Stopping Uncloud managed containers...
-20613f6046d0
-1f1a65b78e93
-4300bde4a2b0
-053fdd57ec56
+b2eb9968e468
 ⏳ Removing Uncloud managed containers...
-20613f6046d0
-1f1a65b78e93
-4300bde4a2b0
-053fdd57ec56
+b2eb9968e468
 ✓ Uncloud managed containers stopped and removed.
 ⏳ Removing Docker network uncloud...
 uncloud
