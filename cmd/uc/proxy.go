@@ -132,35 +132,34 @@ func runProxy(ctx context.Context, uncli *cli.CLI, opts proxyOptions) error {
 	// endpoint and shuffles the data, *it* will actually experience errors.
 	remoteAddr := net.JoinHostPort(ip.String(), strconv.Itoa(opts.remotePort))
 
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
 	p := &proxy.Proxy{
 		Listener:    listener,
 		RemoteAddr:  remoteAddr,
 		DialContext: dialer.DialContext,
 		OnError: func(err error) {
-			fmt.Printf("Failed to proxy to '%s': %v\n", remoteAddr, err)
-			cancel()
+			if proxy.IsConnectionClosedError(err) {
+				return
+			}
+			// A more actionable error instead of the cryptic [ssh -W] command error.
+			if strings.Contains(err.Error(), "Session open refused by peer") {
+				fmt.Printf("Could not connect to '%s': connection refused. "+
+					"Check that the service is running and listening on port %d inside the container.\n",
+					remoteAddr, opts.remotePort)
+				return
+			}
+
+			fmt.Printf("Failed to proxy a connection to '%s': %v\n", remoteAddr, err)
 		},
 	}
-
-	// Run the proxy in the background and signal when it has fully shut down.
-	done := make(chan struct{})
-	go func() {
-		p.Run(ctx)
-		close(done)
-	}()
 
 	// Prefix the local address with the scheme for common HTTP ports so it becomes control-clickable in most
 	// terminals. We assume plain HTTP since TLS is typically terminated by Caddy in front of the service.
 	fmt.Printf("%s%s → %s (%s%s%s)\n", schemeForPort(opts.remotePort), p.Listener.Addr().String(),
 		remoteAddr, opts.service, tui.Faint.Render("/"), containerID)
 
-	<-ctx.Done()
-	// Wait for the proxy to drain in-flight connections and shut down gracefully.
-	<-done
-
+	if err = p.Run(ctx); err != nil {
+		return fmt.Errorf("run proxy to '%s': %w", remoteAddr, err)
+	}
 	return nil
 }
 

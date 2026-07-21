@@ -252,12 +252,18 @@ func (cli *Client) pushImageToMachine(
 	// The proxy runs in a goroutine. Capture the first error in a channel
 	// so we can surface it alongside the push error if push fails.
 	proxyErrCh := make(chan error, 1)
-	onProxyError := func(err error) {
+	recordProxyError := func(err error) {
 		select {
 		case proxyErrCh <- fmt.Errorf("proxy to unregistry: %w", err):
 		default:
 		}
 		pw.Event(progress.NewEvent(proxyEventID, progress.Error, err.Error()))
+	}
+	onProxyError := func(err error) {
+		if proxy.IsConnectionClosedError(err) {
+			return
+		}
+		recordProxyError(err)
 	}
 
 	// socketPath is set for plain rootless Docker (not running inside a VM): the Go proxy listens on a unix
@@ -315,7 +321,11 @@ func (cli *Client) pushImageToMachine(
 	}
 	defer cleanup()
 
-	go unregProxy.Run(proxyCtx)
+	go func() {
+		if err := unregProxy.Run(proxyCtx); err != nil {
+			recordProxyError(err)
+		}
+	}()
 
 	if dockerEnv.Virtualised {
 		// VM-based Docker (Docker Desktop, Rancher Desktop, etc.): run a socat container inside the VM
