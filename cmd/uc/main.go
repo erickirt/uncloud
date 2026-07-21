@@ -24,6 +24,7 @@ import (
 	"github.com/psviderski/uncloud/internal/machine"
 	"github.com/psviderski/uncloud/internal/version"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
 type globalOptions struct {
@@ -42,6 +43,13 @@ func main() {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			// Shell completion runs through the hidden __complete command which has flag parsing disabled,
+			// so the global flags from the completed command line are never parsed. Apply them manually to make
+			// completion work with --connect, --context, and --uncloud-config.
+			if cmd.Name() == cobra.ShellCompRequestCmd {
+				applyGlobalFlagsFromCompletionArgs(cmd.Root().PersistentFlags(), os.Args[1:])
+			}
+
 			cli.BindEnvToFlag(cmd, "connect", "UNCLOUD_CONNECT")
 			cli.BindEnvToFlag(cmd, "context", "UNCLOUD_CONTEXT")
 			cli.BindEnvToFlag(cmd, "uncloud-config", "UNCLOUD_CONFIG")
@@ -158,4 +166,28 @@ func main() {
 		}
 		cobra.CheckErr(err)
 	}
+}
+
+// applyGlobalFlagsFromCompletionArgs parses the global flags from the raw arguments of a __complete command and applies
+// the ones found to flags. The trailing word being completed, unknown flags, and positional arguments are ignored.
+func applyGlobalFlagsFromCompletionArgs(flags *pflag.FlagSet, args []string) {
+	// The shell always passes the word being completed as the last argument, even if it's empty.
+	// Exclude it from parsing as its value may not be complete yet.
+	if len(args) == 0 {
+		return
+	}
+	args = args[:len(args)-1]
+
+	fset := pflag.NewFlagSet("global", pflag.ContinueOnError)
+	fset.ParseErrorsAllowlist.UnknownFlags = true
+	fset.String("connect", "", "")
+	fset.StringP("context", "c", "", "")
+	fset.String("uncloud-config", "", "")
+	// Parsing an incomplete command line may fail, apply the flags parsed so far anyway.
+	_ = fset.Parse(args)
+
+	fset.Visit(func(f *pflag.Flag) {
+		// Setting the flag marks it as changed so it takes precedence over environment variables.
+		_ = flags.Set(f.Name, f.Value.String())
+	})
 }

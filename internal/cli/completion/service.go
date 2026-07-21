@@ -11,7 +11,8 @@ import (
 )
 
 func Services(ctx context.Context, uncli *cli.CLI, args []string, toComplete string) ([]cobra.Completion, cobra.ShellCompDirective) {
-	client, err := uncli.ConnectCluster(ctx)
+	// Disable the connection progress output to not interfere with the shell completion output.
+	client, err := uncli.ConnectClusterWithOptions(ctx, cli.ConnectOptions{})
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveError
 	}
