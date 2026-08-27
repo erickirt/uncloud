@@ -1,29 +1,30 @@
-package distlock
+// Package grpc provides a gRPC transport for distlock node-local lease operations.
+package grpc
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/psviderski/uncloud/internal/machine/api/pb"
+	"github.com/psviderski/uncloud/pkg/distlock"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
-// Server adapts a machine-local Store to the Lease gRPC service.
+// Server adapts a node-local distlock.Store to the Lease gRPC service.
 type Server struct {
-	pb.UnimplementedLeaseServer
-	store Store
+	UnimplementedLeaseServer
+	store distlock.Store
 }
 
-// NewServer creates a machine-local lease server.
-func NewServer(store Store) *Server {
+// NewServer creates a node-local lease server.
+func NewServer(store distlock.Store) *Server {
 	return &Server{store: store}
 }
 
 // Acquire creates a lease when the resource has no unexpired lease.
-func (s *Server) Acquire(ctx context.Context, req *pb.AcquireLeaseRequest) (*pb.AcquireLeaseResponse, error) {
+func (s *Server) Acquire(ctx context.Context, req *AcquireLeaseRequest) (*AcquireLeaseResponse, error) {
 	ttl, err := validateLeaseRequest(req.Resource, req.Token, req.Ttl)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -33,11 +34,11 @@ func (s *Server) Acquire(ctx context.Context, req *pb.AcquireLeaseRequest) (*pb.
 	if err != nil {
 		return nil, storeStatusError(ctx, "acquire lease", err)
 	}
-	return &pb.AcquireLeaseResponse{Acquired: acquired}, nil
+	return &AcquireLeaseResponse{Acquired: acquired}, nil
 }
 
 // Renew extends an unexpired lease when its ownership token matches.
-func (s *Server) Renew(ctx context.Context, req *pb.RenewLeaseRequest) (*pb.RenewLeaseResponse, error) {
+func (s *Server) Renew(ctx context.Context, req *RenewLeaseRequest) (*RenewLeaseResponse, error) {
 	ttl, err := validateLeaseRequest(req.Resource, req.Token, req.Ttl)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -47,11 +48,11 @@ func (s *Server) Renew(ctx context.Context, req *pb.RenewLeaseRequest) (*pb.Rene
 	if err != nil {
 		return nil, storeStatusError(ctx, "renew lease", err)
 	}
-	return &pb.RenewLeaseResponse{Renewed: renewed}, nil
+	return &RenewLeaseResponse{Renewed: renewed}, nil
 }
 
 // Release removes an unexpired lease when its ownership token matches.
-func (s *Server) Release(ctx context.Context, req *pb.ReleaseLeaseRequest) (*pb.ReleaseLeaseResponse, error) {
+func (s *Server) Release(ctx context.Context, req *ReleaseLeaseRequest) (*ReleaseLeaseResponse, error) {
 	if err := validateResourceToken(req.Resource, req.Token); err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -60,7 +61,7 @@ func (s *Server) Release(ctx context.Context, req *pb.ReleaseLeaseRequest) (*pb.
 	if err != nil {
 		return nil, storeStatusError(ctx, "release lease", err)
 	}
-	return &pb.ReleaseLeaseResponse{Released: released}, nil
+	return &ReleaseLeaseResponse{Released: released}, nil
 }
 
 func validateLeaseRequest(resource string, token []byte, ttl *durationpb.Duration) (time.Duration, error) {

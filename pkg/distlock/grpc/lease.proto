@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package api;
+package distlock.v1;
 
-option go_package = "github.com/psviderski/uncloud/internal/machine/api/pb";
+option go_package = "github.com/psviderski/uncloud/pkg/distlock/grpc";
 
 import "google/protobuf/duration.proto";
 
-// Lease provides atomic operations for time-bound ownership of resources on a single machine.
+// Lease provides atomic operations for time-bound ownership of resources on one node.
 service Lease {
   // Acquire creates a lease when the resource has no unexpired lease.
   rpc Acquire(AcquireLeaseRequest) returns (AcquireLeaseResponse);

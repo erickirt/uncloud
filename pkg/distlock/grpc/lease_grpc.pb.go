@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.27.3
-// source: internal/machine/api/pb/lease.proto
+// source: pkg/distlock/grpc/lease.proto
 
-package pb
+package grpc
 
 import (
 	context "context"
@@ -19,16 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Lease_Acquire_FullMethodName = "/api.Lease/Acquire"
-	Lease_Renew_FullMethodName   = "/api.Lease/Renew"
-	Lease_Release_FullMethodName = "/api.Lease/Release"
+	Lease_Acquire_FullMethodName = "/distlock.v1.Lease/Acquire"
+	Lease_Renew_FullMethodName   = "/distlock.v1.Lease/Renew"
+	Lease_Release_FullMethodName = "/distlock.v1.Lease/Release"
 )
 
 // LeaseClient is the client API for Lease service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// Lease provides atomic operations for time-bound ownership of resources on a single machine.
+// Lease provides atomic operations for time-bound ownership of resources on one node.
 type LeaseClient interface {
 	// Acquire creates a lease when the resource has no unexpired lease.
 	Acquire(ctx context.Context, in *AcquireLeaseRequest, opts ...grpc.CallOption) (*AcquireLeaseResponse, error)
@@ -80,7 +80,7 @@ func (c *leaseClient) Release(ctx context.Context, in *ReleaseLeaseRequest, opts
 // All implementations must embed UnimplementedLeaseServer
 // for forward compatibility.
 //
-// Lease provides atomic operations for time-bound ownership of resources on a single machine.
+// Lease provides atomic operations for time-bound ownership of resources on one node.
 type LeaseServer interface {
 	// Acquire creates a lease when the resource has no unexpired lease.
 	Acquire(context.Context, *AcquireLeaseRequest) (*AcquireLeaseResponse, error)
@@ -186,7 +186,7 @@ func _Lease_Release_Handler(srv interface{}, ctx context.Context, dec func(inter
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Lease_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.Lease",
+	ServiceName: "distlock.v1.Lease",
 	HandlerType: (*LeaseServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -203,5 +203,5 @@ var Lease_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "internal/machine/api/pb/lease.proto",
+	Metadata: "pkg/distlock/grpc/lease.proto",
 }

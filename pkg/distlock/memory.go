@@ -86,7 +86,7 @@ func (s *MemoryStore) Renew(
 	return true, nil
 }
 
-// Release removes a lease when its ownership token matches.
+// Release removes an unexpired lease when its ownership token matches.
 func (s *MemoryStore) Release(ctx context.Context, resource string, token []byte) (bool, error) {
 	if err := validateStoreResourceToken(ctx, resource, token); err != nil {
 		return false, err
