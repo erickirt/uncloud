@@ -10,6 +10,7 @@ import (
 	"github.com/psviderski/uncloud/internal/machine/api/pb"
 	"github.com/psviderski/uncloud/internal/machine/docker"
 	"github.com/psviderski/uncloud/pkg/api"
+	distlockgrpc "github.com/psviderski/uncloud/pkg/distlock/grpc"
 	"golang.org/x/net/proxy"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -28,6 +29,7 @@ type Client struct {
 	// Docker is a namespaced client for the Docker service to distinguish Uncloud-specific service container operations
 	// from generic Docker operations.
 	Docker *docker.Client
+	leases distlockgrpc.LeaseClient
 }
 
 var _ api.Client = (*Client)(nil)
@@ -57,6 +59,7 @@ func New(ctx context.Context, connector Connector) (*Client, error) {
 	c.ClusterClient = pb.NewClusterClient(c.conn)
 	c.Caddy = pb.NewCaddyClient(c.conn)
 	c.Docker = docker.NewClient(c.conn)
+	c.leases = distlockgrpc.NewLeaseClient(c.conn)
 
 	return c, nil
 }

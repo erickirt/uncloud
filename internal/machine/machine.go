@@ -42,6 +42,8 @@ import (
 	"github.com/psviderski/uncloud/internal/secret"
 	"github.com/psviderski/uncloud/internal/version"
 	"github.com/psviderski/uncloud/pkg/api"
+	"github.com/psviderski/uncloud/pkg/distlock"
+	distlockgrpc "github.com/psviderski/uncloud/pkg/distlock/grpc"
 	"github.com/psviderski/unregistry"
 	"github.com/siderolabs/grpc-proxy/proxy"
 	"golang.org/x/sync/errgroup"
@@ -305,7 +307,8 @@ func NewMachine(config *Config) (*Machine, error) {
 		WaitForNetworkReady: m.WaitForNetworkReady,
 	})
 	caddyServer := caddyconfig.NewServer(caddyconfig.NewService(config.CaddyConfigDir))
-	m.localMachineServer = newGRPCServer(m, c, m.dockerServer, caddyServer)
+	leaseServer := distlockgrpc.NewServer(distlock.NewMemoryStore())
+	m.localMachineServer = newGRPCServer(m, c, m.dockerServer, caddyServer, leaseServer)
 
 	if m.Initialised() {
 		close(m.initialised)
@@ -314,12 +317,19 @@ func NewMachine(config *Config) (*Machine, error) {
 	return m, nil
 }
 
-func newGRPCServer(m pb.MachineServer, c pb.ClusterServer, d pb.DockerServer, caddy pb.CaddyServer) *grpc.Server {
+func newGRPCServer(
+	m pb.MachineServer,
+	c pb.ClusterServer,
+	d pb.DockerServer,
+	caddy pb.CaddyServer,
+	lease distlockgrpc.LeaseServer,
+) *grpc.Server {
 	s := grpc.NewServer()
 	pb.RegisterMachineServer(s, m)
 	pb.RegisterClusterServer(s, c)
 	pb.RegisterDockerServer(s, d)
 	pb.RegisterCaddyServer(s, caddy)
+	distlockgrpc.RegisterLeaseServer(s, lease)
 	return s
 }
 
