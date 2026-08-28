@@ -78,8 +78,8 @@ func (cli *Client) progressOut() *streams.Out {
 // ProxyMachinesContext returns a new context that proxies gRPC requests to the specified machines.
 // If namesOrIDs is nil or empty, all machines are included.
 // This triggers One2Many proxying, which always injects metadata into the response.
-func (cli *Client) ProxyMachinesContext(ctx context.Context, namesOrIDs []string) context.Context {
-	md := metadata.New(nil)
+func ProxyMachinesContext(ctx context.Context, namesOrIDs []string) context.Context {
+	md := outgoingMetadataWithoutProxyTargets(ctx)
 	if len(namesOrIDs) == 0 {
 		md.Append("machines", "*")
 	} else {
@@ -92,7 +92,26 @@ func (cli *Client) ProxyMachinesContext(ctx context.Context, namesOrIDs []string
 // ProxySingleMachineContext returns a new context that proxies gRPC requests to a single specified machine.
 // This triggers One2One proxying, which does NOT inject metadata into the response.
 // Use this for requests that expect a single response message without metadata wrapper.
-func (cli *Client) ProxySingleMachineContext(ctx context.Context, nameOrID string) context.Context {
-	md := metadata.Pairs("machine", nameOrID)
+func ProxySingleMachineContext(ctx context.Context, nameOrID string) context.Context {
+	md := outgoingMetadataWithoutProxyTargets(ctx)
+	md.Set("machine", nameOrID)
 	return metadata.NewOutgoingContext(ctx, md)
+}
+
+func outgoingMetadataWithoutProxyTargets(ctx context.Context) metadata.MD {
+	md, _ := metadata.FromOutgoingContext(ctx)
+	md = md.Copy()
+	md.Delete("machine")
+	md.Delete("machines")
+	return md
+}
+
+// ProxyMachinesContext returns a new context that proxies gRPC requests to the specified machines.
+func (cli *Client) ProxyMachinesContext(ctx context.Context, namesOrIDs []string) context.Context {
+	return ProxyMachinesContext(ctx, namesOrIDs)
+}
+
+// ProxySingleMachineContext returns a new context that proxies gRPC requests to a single specified machine.
+func (cli *Client) ProxySingleMachineContext(ctx context.Context, nameOrID string) context.Context {
+	return ProxySingleMachineContext(ctx, nameOrID)
 }

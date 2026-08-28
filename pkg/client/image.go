@@ -59,7 +59,7 @@ func (cli *Client) InspectRemoteImage(ctx context.Context, id string) ([]api.Mac
 // it lists images on all machines.
 func (cli *Client) ListImages(ctx context.Context, filter api.ImageFilter) ([]api.MachineImages, error) {
 	// Broadcast the image list request to the specified machines or all machines if none specified.
-	listCtx := cli.ProxyMachinesContext(ctx, filter.Machines)
+	listCtx := ProxyMachinesContext(ctx, filter.Machines)
 
 	opts := image.ListOptions{Manifests: true}
 	if filter.Name != "" {

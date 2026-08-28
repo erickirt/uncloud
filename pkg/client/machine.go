@@ -78,7 +78,7 @@ func (cli *Client) ListMachines(ctx context.Context, filter *api.MachineFilter) 
 func (cli *Client) UpdateMachine(
 	ctx context.Context, nameOrID string, req *pb.UpdateMachineRequest,
 ) (*pb.MachineInfo, error) {
-	ctx = cli.ProxySingleMachineContext(ctx, nameOrID)
+	ctx = ProxySingleMachineContext(ctx, nameOrID)
 	resp, err := cli.MachineClient.UpdateMachine(ctx, req)
 	if err != nil {
 		if s, ok := status.FromError(err); ok && s.Code() == codes.NotFound {
